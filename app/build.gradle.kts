@@ -69,6 +69,12 @@ dependencies {
 
     implementation(libs.splash)
 
+    implementation(libs.okhttp3)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.scalars)
+    implementation(libs.retrofit.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
+
     //Test dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
