@@ -1,7 +1,5 @@
 package com.example.gameapp.ui.composable
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,12 +23,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.gameapp.model.GenreItem
+import com.example.gameapp.db.entity.GenreItem
 import com.example.gameapp.viewmodel.OnboardingViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -54,7 +49,11 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
                     items(genres.size, itemContent = { index ->
                         genres[index].id?.let { id ->
                             genres[index].name?.let {name ->
-                                val genre = GenreItem(id, name, false)
+                                val genre = GenreItem(
+                                    genreId = id,
+                                    name = name,
+                                    isSelected = false
+                                )
                                 GenreEntry(genre = genre, viewModel)
                                 if (index != genres.size) {
                                     Spacer(

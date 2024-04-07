@@ -4,17 +4,19 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gameapp.model.GenreItem
+import com.example.gameapp.db.entity.GenreItem
 import com.example.gameapp.model.response.Genre
 import com.example.gameapp.repository.BackendRepository
 import com.example.gameapp.repository.DataStorePreferences
+import com.example.gameapp.repository.DatabaseRepository
 import com.example.gameapp.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
     private val dataStore: DataStorePreferences,
-    private val backendRepository: BackendRepository
+    private val backendRepository: BackendRepository,
+    private val databaseRepository: DatabaseRepository
 ): ViewModel() {
     var genres = mutableStateOf<List<Genre>>(listOf())
     var selectedGenres = mutableStateOf<MutableList<GenreItem>>(mutableListOf())
@@ -50,10 +52,11 @@ class OnboardingViewModel(
 
     fun finishOnboarding() {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStore.saveIsOnboardingDone(true)
             selectedGenres.value.forEach {
-                Log.d("GameApp", it.name)
+                Log.d("GameApp", "Saving ${it.name} to db")
+                databaseRepository.upsertGenre(it)
             }
+            dataStore.saveIsOnboardingDone(true)
             isOnboardingFinished.value = true
         }
     }

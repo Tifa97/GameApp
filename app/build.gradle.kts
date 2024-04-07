@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.serialization)
+    id ("kotlin-kapt")
 }
 
 android {
@@ -75,6 +76,12 @@ dependencies {
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.retrofit.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.room.runtime)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     //Test dependencies
     testImplementation(libs.junit)
