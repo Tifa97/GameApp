@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.splash)
 
     implementation(libs.okhttp3)
+    implementation(libs.okhttp3.interceptor)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.retrofit.serialization.converter)

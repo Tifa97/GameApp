@@ -41,6 +41,7 @@ koin-compose = {  group = "io.insert-koin", name = "koin-androidx-compose", vers
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
 splash = { group = "androidx.core", name = "core-splashscreen", version.ref = "splash" }
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttp" }
+okhttp3-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttp" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
 retrofit-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitSerialization" }

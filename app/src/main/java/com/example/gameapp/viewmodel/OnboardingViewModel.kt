@@ -45,7 +45,7 @@ class OnboardingViewModel(
                     }
                     isLoading.value = false
                 }
-                is Resource.Loading -> { isLoading.value = false }
+                else -> {}
             }
         }
     }

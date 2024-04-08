@@ -2,7 +2,6 @@ package com.example.gameapp.repository
 
 import com.example.gameapp.db.dao.GenreDao
 import com.example.gameapp.db.entity.GenreItem
-import com.example.gameapp.model.response.Genre
 import kotlinx.coroutines.flow.Flow
 
 class DatabaseRepository(private val genreDao: GenreDao) {
