@@ -17,7 +17,7 @@ fun GameAppNavGraph(
             OnboardingScreen()
         }
         composable(route = Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
     }
 }
