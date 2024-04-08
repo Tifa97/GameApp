@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.example.gameapp.model.response.Game
+import com.example.gameapp.navigation.Screen
 import com.example.gameapp.viewmodel.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -70,7 +71,11 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                     })
                 }
                 if (isLoading) {
-                    CircularProgressIndicator()
+                    Box(
+                        modifier = modifier.fillMaxWidth()
+                    ) {
+                        CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
+                    }
                 } else {
                     LazyColumn(modifier = modifier.fillMaxSize()) {
                         items(games.size, itemContent = {
@@ -98,7 +103,9 @@ fun GameEntry(
             .aspectRatio(1f)
             .background(Color.White)
             .clickable {
-                // Navigate to game details
+                navController.navigate(
+                    "${Screen.GameDetails.route}/${game.name}"
+                )
             }
     ) {
         Column {
@@ -114,7 +121,9 @@ fun GameEntry(
                 }
             )
             Box(
-                modifier = modifier.weight(1f).fillMaxWidth()
+                modifier = modifier
+                    .weight(1f)
+                    .fillMaxWidth()
             ) {
                 Text(
                     text = game.name ?: "",
