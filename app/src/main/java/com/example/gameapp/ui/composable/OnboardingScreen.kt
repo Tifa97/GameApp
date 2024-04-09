@@ -24,7 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.gameapp.R
 import com.example.gameapp.db.entity.GenreItem
 import com.example.gameapp.viewmodel.OnboardingViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -33,6 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 fun OnboardingScreen(modifier: Modifier = Modifier) {
     val viewModel = koinViewModel<OnboardingViewModel>()
     val genres by remember { viewModel.genres }
+    val selectedGenres by remember { viewModel.selectedGenres }
     val isLoading by remember { viewModel.isLoading }
     val loadError by remember { viewModel.loadError }
     val isOnboardingFinished by remember { viewModel.isOnboardingFinished }
@@ -42,7 +45,10 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
             TopBar()
             if (isLoading) {
                 Box (modifier.fillMaxSize()) {
-                    CircularProgressIndicator(modifier.align(Alignment.Center))
+                    CircularProgressIndicator(
+                        color = Color.Black,
+                        modifier = modifier.align(Alignment.Center)
+                    )
                 }
             } else {
                 LazyColumn(modifier = modifier.fillMaxHeight(0.9f)) {
@@ -76,7 +82,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
                             viewModel.finishOnboarding()
                         }
                     ) {
-                        Text("Next")
+                        Text(stringResource(R.string.save))
                     }
                 }
             }

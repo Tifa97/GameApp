@@ -2,6 +2,7 @@ package com.example.gameapp.ui.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -47,24 +49,34 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     val games by remember { viewModel.games }
     val isLoading by remember { viewModel.isLoading }
     val loadError by remember { viewModel.loadError }
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column {
-        TopBar()
+        TopBar(shouldShowOptions = true, navController = navController)
         if (genres.isEmpty()) {
             // Handle this in a way that you can't finish Onboarding without selecting a genre
             Text(text = "There are no saved genres")
         } else {
             if (selectedGenre.isEmpty()) viewModel.setSelectedGenre(genres[0].name)
             Column(modifier = modifier.fillMaxSize()) {
-                LazyRow {
+                LazyRow(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     items(genres.size, itemContent = {
                         Box(
-                            modifier = modifier.clickable {
+                            modifier = modifier.clickable(
+                                interactionSource = interactionSource,
+                                indication = null
+                            ) {
                                 viewModel.setSelectedGenre(genres[it].name)
                             }
+
                         ) {
                             Text(
                                 text = genres[it].name,
+                                fontWeight = if (genres[it].name == selectedGenre) FontWeight.Bold else FontWeight.Normal,
+                                fontSize = if (genres[it].name == selectedGenre) 18.sp else 16.sp,
                                 modifier = modifier.padding(16.dp)
                             )
                         }
@@ -72,9 +84,14 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 }
                 if (isLoading) {
                     Box(
-                        modifier = modifier.fillMaxWidth()
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.2f)
                     ) {
-                        CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
+                        CircularProgressIndicator(
+                            color = Color.Black,
+                            modifier = modifier.align(Alignment.Center)
+                        )
                     }
                 } else {
                     LazyColumn(modifier = modifier.fillMaxSize()) {
@@ -97,14 +114,14 @@ fun GameEntry(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .padding(horizontal = 6.dp, vertical = 6.dp)
+            .padding(12.dp)
             .shadow(5.dp, RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
             .aspectRatio(1f)
             .background(Color.White)
             .clickable {
                 navController.navigate(
-                    "${Screen.GameDetails.route}/${game.name}"
+                    "${Screen.GameDetails.route}/${game.id.toString()}"
                 )
             }
     ) {
@@ -117,7 +134,12 @@ fun GameEntry(
                     .fillMaxHeight(0.7f)
                     .align(Alignment.CenterHorizontally),
                 loading = {
-                    CircularProgressIndicator()
+                    Box(modifier = modifier.fillMaxSize()) {
+                        CircularProgressIndicator(
+                            color = Color.Black,
+                            modifier = modifier.align(Alignment.Center)
+                        )
+                    }
                 }
             )
             Box(

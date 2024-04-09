@@ -1,6 +1,7 @@
 package com.example.gameapp.repository
 
 import android.util.Log
+import com.example.gameapp.model.response.GameDetailsResponse
 import com.example.gameapp.model.response.GamesResponse
 import com.example.gameapp.model.response.GenresResponse
 import com.example.gameapp.services.RawgApi
@@ -21,6 +22,17 @@ class BackendRepository(private val rawgApi: RawgApi) {
         val result = try {
             // API gives correct response only if genre name is in lowercase
             rawgApi.retrofitService.getGamesForGenre(genres = genre.lowercase())
+        } catch (e: Exception) {
+            Log.e("GameApp", e.stackTraceToString())
+            return Resource.Error("Error fetching data from server")
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getGameDetails(id: String): Resource<GameDetailsResponse> {
+        val result = try {
+            // API gives correct response only if genre name is in lowercase
+            rawgApi.retrofitService.getGameDetails(id = id)
         } catch (e: Exception) {
             Log.e("GameApp", e.stackTraceToString())
             return Resource.Error("Error fetching data from server")

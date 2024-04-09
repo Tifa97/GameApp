@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">GameApp</string>
     <string name="gameapp">GameApp</string>
+    <string name="platforms">"Platforms: "</string>
+    <string name="rating">"Rating: "</string>
+    <string name="released">"Date released: "</string>
+    <string name="playtime">"Playtime in hours: "</string>
+    <string name="website">"Website: "</string>
+    <string name="description">"Description: "</string>
+    <string name="save">Save</string>
 </resources>

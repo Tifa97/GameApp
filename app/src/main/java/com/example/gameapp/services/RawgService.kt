@@ -1,5 +1,6 @@
 package com.example.gameapp.services
 
+import com.example.gameapp.model.response.GameDetailsResponse
 import com.example.gameapp.model.response.GamesResponse
 import com.example.gameapp.model.response.GenresResponse
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -9,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 const val BASE_URL = "https://api.rawg.io/api/"
@@ -42,6 +44,12 @@ interface RawgApiService {
         @Query("key") key: String = API_KEY,
         @Query("genres") genres: String
     ): GamesResponse
+
+    @GET("games/{id}")
+    suspend fun getGameDetails(
+        @Path("id") id: String,
+        @Query("key") key: String = API_KEY
+    ): GameDetailsResponse
 }
 
 object RawgApi {

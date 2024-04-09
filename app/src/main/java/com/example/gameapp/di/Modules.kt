@@ -8,6 +8,7 @@ import com.example.gameapp.viewmodel.SplashViewModel
 import com.example.gameapp.repository.DataStorePreferences
 import com.example.gameapp.repository.DatabaseRepository
 import com.example.gameapp.services.RawgApi
+import com.example.gameapp.viewmodel.GameDetailsViewModel
 import com.example.gameapp.viewmodel.HomeViewModel
 import com.example.gameapp.viewmodel.OnboardingViewModel
 
@@ -23,4 +24,5 @@ val gameAppModule = module {
     viewModel { SplashViewModel(get()) }
     viewModel { OnboardingViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
+    viewModel { GameDetailsViewModel(get()) }
 }
