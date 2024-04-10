@@ -1,10 +1,8 @@
 package com.example.gameapp.ui.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph
 import com.example.gameapp.R
 import com.example.gameapp.navigation.Screen
 
@@ -53,7 +50,7 @@ fun TopBar(
                     modifier = modifier.align(Alignment.CenterEnd),
                     onClick = {
                         navController?.let {
-                            navController.navigate(Screen.Onboarding.route)
+                            navController.navigate(Screen.GenreSelection.route)
                         }
                     }
                 ) {

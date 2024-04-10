@@ -21,28 +21,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.gameapp.R
 import com.example.gameapp.db.entity.GenreItem
-import com.example.gameapp.viewmodel.OnboardingViewModel
+import com.example.gameapp.navigation.Screen
+import com.example.gameapp.viewmodel.GenreSelectionViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun OnboardingScreen(modifier: Modifier = Modifier) {
-    val viewModel = koinViewModel<OnboardingViewModel>()
+fun GenreSelectionScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    val viewModel = koinViewModel<GenreSelectionViewModel>()
+
+    val savedGenres = viewModel.savedGenres.collectAsStateWithLifecycle()
+    val isOnboardingDone = viewModel.isOnboardingDone.collectAsStateWithLifecycle()
+
     val genres by remember { viewModel.genres }
-    val selectedGenres by remember { viewModel.selectedGenres }
     val isLoading by remember { viewModel.isLoading }
     val loadError by remember { viewModel.loadError }
-    val isOnboardingFinished by remember { viewModel.isOnboardingFinished }
 
     Surface(modifier = modifier.fillMaxSize()) {
         Column(modifier = modifier.fillMaxSize()) {
             TopBar()
+            LoadError(error = loadError)
             if (isLoading) {
                 Box (modifier.fillMaxSize()) {
                     CircularProgressIndicator(
@@ -58,9 +68,12 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
                                 val genre = GenreItem(
                                     genreId = id,
                                     name = name,
-                                    isSelected = false
+                                    isSelected = savedGenres.value.any { it.genreId == id }
                                 )
-                                GenreEntry(genre = genre, viewModel)
+                                GenreEntry(
+                                    genre = genre,
+                                    viewModel = viewModel
+                                )
                                 if (index != genres.size) {
                                     Spacer(
                                         modifier = modifier
@@ -79,7 +92,11 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
                     Button(
                         modifier = Modifier.align(Alignment.Center),
                         onClick = {
-                            viewModel.finishOnboarding()
+                            if (!isOnboardingDone.value) {
+                                viewModel.saveOnboardingFinished()
+                            }
+                            viewModel.saveGenreEdits()
+                            navController.navigate(Screen.Home.route)
                         }
                     ) {
                         Text(stringResource(R.string.save))
@@ -91,8 +108,13 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun GenreEntry(genre: GenreItem, viewModel: OnboardingViewModel, modifier: Modifier = Modifier) {
-    val isChecked = remember { mutableStateOf(genre.isSelected) }
+fun GenreEntry(
+    genre: GenreItem,
+    viewModel: GenreSelectionViewModel,
+    modifier: Modifier = Modifier
+) {
+    // rememberSaveable makes sure that switch state survives LazyColumn scroll
+    val isChecked = rememberSaveable { mutableStateOf(genre.isSelected) }
 
     Row (
         modifier = modifier

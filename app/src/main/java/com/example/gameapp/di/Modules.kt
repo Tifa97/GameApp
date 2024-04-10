@@ -10,19 +10,19 @@ import com.example.gameapp.repository.DatabaseRepository
 import com.example.gameapp.services.RawgApi
 import com.example.gameapp.viewmodel.GameDetailsViewModel
 import com.example.gameapp.viewmodel.HomeViewModel
-import com.example.gameapp.viewmodel.OnboardingViewModel
+import com.example.gameapp.viewmodel.GenreSelectionViewModel
 
 val gameAppModule = module {
     single { GameRoom.getInstance(get()) }
     single { get<GameRoom>().dao }
 
     single { DataStorePreferences(get()) }
-    single { BackendRepository(get()) }
+    single { BackendRepository(get(), get()) }
     single { RawgApi }
     single { DatabaseRepository(get()) }
 
     viewModel { SplashViewModel(get()) }
-    viewModel { OnboardingViewModel(get(), get(), get()) }
+    viewModel { GenreSelectionViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
     viewModel { GameDetailsViewModel(get()) }
 }

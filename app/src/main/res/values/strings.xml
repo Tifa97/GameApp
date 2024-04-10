@@ -8,4 +8,8 @@
     <string name="website">"Website: "</string>
     <string name="description">"Description: "</string>
     <string name="save">Save</string>
+    <string name="no_genres_selected">You haven\'t selected any genre. If you want to display games per genre, go to settings and select the desired genres.</string>
+    <string name="get_genres_error">Oops.. We can\'t fetch genres at the moment.</string>
+    <string name="get_games_error">Oops.. We can\'t fetch games.</string>
+    <string name="get_game_details_error">Oops.. We can\'t fetch details for this game.</string>
 </resources>

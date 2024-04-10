@@ -1,6 +1,5 @@
 package com.example.gameapp.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,19 +9,23 @@ import com.example.gameapp.repository.BackendRepository
 import com.example.gameapp.repository.DataStorePreferences
 import com.example.gameapp.repository.DatabaseRepository
 import com.example.gameapp.util.Resource
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class OnboardingViewModel(
+class GenreSelectionViewModel(
     private val dataStore: DataStorePreferences,
     private val backendRepository: BackendRepository,
     private val databaseRepository: DatabaseRepository
 ): ViewModel() {
+    val savedGenres = databaseRepository.genresFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    val isOnboardingDone = dataStore.isOnboardingDoneFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+
     var genres = mutableStateOf<List<Genre>>(listOf())
-    var selectedGenres = mutableStateOf<MutableList<GenreItem>>(mutableListOf())
     var isLoading = mutableStateOf(false)
     var loadError = mutableStateOf("")
-    var isOnboardingFinished = mutableStateOf(false)
+
+    private var editedGenres = mutableListOf<GenreItem>()
 
     init {
         getGenres()
@@ -50,19 +53,34 @@ class OnboardingViewModel(
         }
     }
 
-    fun finishOnboarding() {
-        viewModelScope.launch(Dispatchers.IO) {
-            selectedGenres.value.forEach {
-                Log.d("GameApp", "Saving ${it.name} to db")
-                databaseRepository.upsertGenre(it)
+    fun saveGenreEdits() {
+        viewModelScope.launch {
+            editedGenres.forEach { genre ->
+                when {
+                    genre.isSelected && !savedGenres.value.any { it.genreId == genre.genreId } -> {
+                        databaseRepository.upsertGenre(genre)
+                    }
+                    !genre.isSelected && savedGenres.value.any { it.genreId == genre.genreId } -> {
+                        databaseRepository.deleteGenreByGenreId(genre.genreId)
+                    }
+                    else -> {}
+                }
             }
-            dataStore.saveIsOnboardingDone(true)
-            isOnboardingFinished.value = true
         }
     }
 
     fun editSelectedGenreList(genre: GenreItem) {
-        if (genre.isSelected && !selectedGenres.value.contains(genre)) selectedGenres.value.add(genre)
-        if (!genre.isSelected && selectedGenres.value.contains(genre)) selectedGenres.value.remove(genre)
+        if (!editedGenres.any { it.genreId == genre.genreId }) {
+            editedGenres.add(genre)
+        } else {
+            editedGenres.removeIf { it.genreId == genre.genreId }
+            editedGenres.add(genre)
+        }
+    }
+
+    fun saveOnboardingFinished() {
+        viewModelScope.launch {
+            dataStore.saveIsOnboardingDone(true)
+        }
     }
 }

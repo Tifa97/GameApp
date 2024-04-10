@@ -14,8 +14,8 @@ interface GenreDao {
     @Upsert
     suspend fun upsertGenre(genre: GenreItem)
 
-    @Delete
-    suspend fun deleteGenre(genre: GenreItem)
+    @Query("DELETE FROM genre WHERE genreId = :genreId")
+    suspend fun deleteGenreByGenreId(genreId: Int)
 
     @Query("SELECT * FROM genre")
     fun getGenres(): Flow<List<GenreItem>>

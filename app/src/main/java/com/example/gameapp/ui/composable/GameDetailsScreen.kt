@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +42,7 @@ fun GameDetailsScreen(
     val gameDetails by remember { viewModel.gameDetails }
     val isLoading by remember { viewModel.isLoading }
     val platforms by remember { viewModel.platformNames }
+    val loadError by remember { viewModel.loadError }
 
     val uriHandler = LocalUriHandler.current
 
@@ -51,6 +51,8 @@ fun GameDetailsScreen(
             viewModel.getGameDetails(it)
         }
     }
+
+    LoadError(error = loadError)
 
     if (isLoading) {
         Box(modifier = modifier.fillMaxSize()) {

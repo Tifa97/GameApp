@@ -9,8 +9,8 @@ class DatabaseRepository(private val genreDao: GenreDao) {
         genreDao.upsertGenre(genre)
     }
 
-    suspend fun deleteGenre(genre: GenreItem) {
-        genreDao.deleteGenre(genre)
+    suspend fun deleteGenreByGenreId(genreId: Int) {
+        genreDao.deleteGenreByGenreId(genreId)
     }
 
     val genresFlow: Flow<List<GenreItem>>

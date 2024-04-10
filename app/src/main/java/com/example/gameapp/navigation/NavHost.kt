@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.gameapp.ui.composable.GameDetailsScreen
+import com.example.gameapp.ui.composable.GenreSelectionScreen
 import com.example.gameapp.ui.composable.HomeScreen
-import com.example.gameapp.ui.composable.OnboardingScreen
 
 @Composable
 fun GameAppNavGraph(
@@ -17,8 +17,8 @@ fun GameAppNavGraph(
     startDestination: String
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
-        composable(route = Screen.Onboarding.route) {
-            OnboardingScreen()
+        composable(route = Screen.GenreSelection.route) {
+            GenreSelectionScreen(navController)
         }
         composable(route = Screen.Home.route) {
             HomeScreen(navController = navController)
