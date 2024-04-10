@@ -6,11 +6,11 @@ import com.example.gameapp.R
 import com.example.gameapp.model.response.GameDetailsResponse
 import com.example.gameapp.model.response.GamesResponse
 import com.example.gameapp.model.response.GenresResponse
-import com.example.gameapp.services.RawgApi
+import com.example.gameapp.services.RawgApiClient
 import com.example.gameapp.util.Resource
 
 class BackendRepository(
-    private val rawgApi: RawgApi,
+    private val rawgApi: RawgApiClient,
     private val context: Context
 ) {
     suspend fun getGenres(): Resource<GenresResponse> {

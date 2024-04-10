@@ -40,6 +40,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.gameapp.R
 import com.example.gameapp.model.response.Game
 import com.example.gameapp.navigation.Screen
+import com.example.gameapp.util.Constants
 import com.example.gameapp.viewmodel.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -98,6 +99,9 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                             )
                         }
                     })
+                }
+                if (selectedGenre == Constants.RPG || selectedGenre.contains(" ")) {
+                    LoadError(error = stringResource(R.string.endpoint_issue))
                 }
                 if (isLoading) {
                     Box(

@@ -12,4 +12,5 @@
     <string name="get_genres_error">Oops.. We can\'t fetch genres at the moment.</string>
     <string name="get_games_error">Oops.. We can\'t fetch games.</string>
     <string name="get_game_details_error">Oops.. We can\'t fetch details for this game.</string>
+    <string name="endpoint_issue">I couldn\'t find the proper endpoint for fetching RPG games and games for genres that contain multiple words.</string>
 </resources>

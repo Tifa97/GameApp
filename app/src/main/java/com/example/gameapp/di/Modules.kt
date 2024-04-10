@@ -7,7 +7,7 @@ import org.koin.dsl.module
 import com.example.gameapp.viewmodel.SplashViewModel
 import com.example.gameapp.repository.DataStorePreferences
 import com.example.gameapp.repository.DatabaseRepository
-import com.example.gameapp.services.RawgApi
+import com.example.gameapp.services.RawgApiClient
 import com.example.gameapp.viewmodel.GameDetailsViewModel
 import com.example.gameapp.viewmodel.HomeViewModel
 import com.example.gameapp.viewmodel.GenreSelectionViewModel
@@ -18,7 +18,7 @@ val gameAppModule = module {
 
     single { DataStorePreferences(get()) }
     single { BackendRepository(get(), get()) }
-    single { RawgApi }
+    single { RawgApiClient }
     single { DatabaseRepository(get()) }
 
     viewModel { SplashViewModel(get()) }

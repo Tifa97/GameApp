@@ -35,28 +35,7 @@ class MainActivity : ComponentActivity() {
                 val screen by remember { splashViewModel.startDestination }
                 val navController = rememberNavController()
                 GameAppNavGraph(navController = navController, startDestination = screen)
-               //Greeting(name = "Kristian")
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    val viewModel = koinViewModel<SplashViewModel>()
-//    val startDestination by remember {
-//        viewModel.startDestination
-//    }
-    Text(
-        text = "Hello ${viewModel.startDestination}!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GameAppTheme {
-        Greeting("Android")
     }
 }

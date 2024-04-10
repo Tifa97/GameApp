@@ -24,15 +24,15 @@ fun GameAppNavGraph(
             HomeScreen(navController = navController)
         }
         composable(
-            route = "${Screen.GameDetails.route}/{gameId}",
+            route = "${Screen.GameDetails.route}/{${Screen.GAME_ID_ARG}}",
             arguments = listOf(
-                navArgument("gameId") {
+                navArgument(Screen.GAME_ID_ARG) {
                     type = NavType.StringType
                 }
             )
         ) {
             val gameId = remember {
-                it.arguments?.getString("gameId")
+                it.arguments?.getString(Screen.GAME_ID_ARG)
             }
             GameDetailsScreen(gameId = gameId, navController = navController)
         }

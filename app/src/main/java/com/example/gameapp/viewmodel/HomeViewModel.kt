@@ -43,11 +43,6 @@ class HomeViewModel(
                 is Resource.Success -> {
                     result.data?.let {
                         games.value = it.results
-                        it.results.forEach { game ->
-                            game.name?.let { name ->
-                                Log.d("TestGames", name)
-                            }
-                        }
                     }
                     isLoading.value = false
                 }
