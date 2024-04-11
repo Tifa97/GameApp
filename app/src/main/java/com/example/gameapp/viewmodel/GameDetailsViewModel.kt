@@ -1,6 +1,7 @@
 package com.example.gameapp.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,27 +15,34 @@ import kotlinx.coroutines.launch
 class GameDetailsViewModel(
     private val backendRepository: BackendRepository
 ): ViewModel() {
-    var gameDetails = mutableStateOf<GameDetailsResponse?>(null)
-    var platformNames = mutableStateOf("")
-    var isLoading = mutableStateOf(false)
-    var loadError = mutableStateOf("")
+    private val _gameDetails = mutableStateOf<GameDetailsResponse?>(null)
+    val gameDetails: State<GameDetailsResponse?> = _gameDetails
+
+    private val _platformNames = mutableStateOf("")
+    val platformNames: State<String> = _platformNames
+
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
+    private val _loadError = mutableStateOf("")
+    val loadError: State<String> = _loadError
 
     fun getGameDetails(id: String) {
         viewModelScope.launch {
-            isLoading.value = true
+            _isLoading.value = true
             val result = backendRepository.getGameDetails(id)
             when(result) {
                 is Resource.Success -> {
                     result.data?.let {
-                        gameDetails.value = it
+                        _gameDetails.value = it
                         addPlatformNamesToList(it.platforms)
                     }
-                    isLoading.value = false
+                    _isLoading.value = false
                 }
                 is Resource.Error -> {
                     result.message?.let {
-                        loadError.value = it
-                        isLoading.value = false
+                        _loadError.value = it
+                        _isLoading.value = false
                     }
                 }
                 else -> {}
@@ -48,7 +56,7 @@ class GameDetailsViewModel(
             list.forEach { platform ->
                 platform.platform?.name?.let { resultList.add(it) }
             }
-            platformNames.value = resultList.joinToString(separator = ", ")
+            _platformNames.value = resultList.joinToString(separator = ", ")
         }
     }
 }

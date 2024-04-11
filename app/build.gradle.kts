@@ -2,7 +2,11 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.serialization)
+
+    // Not using alias for these since they don't have a version.
+    // Using alias without version in version library fails
     id ("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -86,6 +90,9 @@ dependencies {
 
     implementation(libs.coil)
     implementation(libs.coil.compose)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 
     //Test dependencies
     testImplementation(libs.junit)

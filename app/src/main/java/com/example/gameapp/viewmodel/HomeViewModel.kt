@@ -1,11 +1,13 @@
 package com.example.gameapp.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gameapp.model.response.Game
 import com.example.gameapp.model.response.Genre
+import com.example.gameapp.navigation.Screen
 import com.example.gameapp.repository.BackendRepository
 import com.example.gameapp.repository.DatabaseRepository
 import com.example.gameapp.util.Resource
@@ -21,11 +23,17 @@ class HomeViewModel(
     private val backendRepository: BackendRepository,
     databaseRepository: DatabaseRepository
 ): ViewModel() {
-    var games = mutableStateOf<List<Game>>(listOf())
     val savedGenres = databaseRepository.genresFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-    var isLoading = mutableStateOf(false)
-    var loadError = mutableStateOf("")
     var selectedGenre: MutableStateFlow<String> = MutableStateFlow("")
+
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
+    private val _loadError = mutableStateOf("")
+    val loadError: State<String> = _loadError
+
+    private val _games = mutableStateOf<List<Game>>(listOf())
+    val games: State<List<Game>> = _games
 
     init {
         viewModelScope.launch {
@@ -35,21 +43,21 @@ class HomeViewModel(
         }
     }
 
-    fun getGamesForGenre(genreName: String) {
+    private fun getGamesForGenre(genreName: String) {
         viewModelScope.launch {
-            isLoading.value = true
+            _isLoading.value = true
             val result = backendRepository.getGamesForGenre(genreName)
             when(result) {
                 is Resource.Success -> {
                     result.data?.let {
-                        games.value = it.results
+                        _games.value = it.results
                     }
-                    isLoading.value = false
+                    _isLoading.value = false
                 }
                 is Resource.Error -> {
                     result.message?.let {
-                        loadError.value = it
-                        isLoading.value = false
+                        _loadError.value = it
+                        _isLoading.value = false
                     }
                 }
                 else -> {}

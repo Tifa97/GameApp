@@ -1,5 +1,6 @@
 package com.example.gameapp.viewmodel
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,9 +22,14 @@ class GenreSelectionViewModel(
     val savedGenres = databaseRepository.genresFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val isOnboardingDone = dataStore.isOnboardingDoneFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
-    var genres = mutableStateOf<List<Genre>>(listOf())
-    var isLoading = mutableStateOf(false)
-    var loadError = mutableStateOf("")
+    private val _genres = mutableStateOf<List<Genre>>(listOf())
+    val genres: State<List<Genre>> = _genres
+
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
+    private val _loadError = mutableStateOf("")
+    val loadError: State<String> = _loadError
 
     private var editedGenres = mutableListOf<GenreItem>()
 
@@ -33,20 +39,20 @@ class GenreSelectionViewModel(
 
     private fun getGenres() {
         viewModelScope.launch {
-            isLoading.value = true
+            _isLoading.value = true
             val result = backendRepository.getGenres()
             when (result) {
                 is Resource.Success -> {
                     result.data?.let {
-                        genres.value = it.results
+                        _genres.value = it.results
                     }
-                    isLoading.value = false
+                    _isLoading.value = false
                 }
                 is Resource.Error -> {
                     result.message?.let {
-                        loadError.value = it
+                        _loadError.value = it
                     }
-                    isLoading.value = false
+                    _isLoading.value = false
                 }
                 else -> {}
             }

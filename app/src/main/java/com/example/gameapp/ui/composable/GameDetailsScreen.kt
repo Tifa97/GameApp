@@ -2,7 +2,6 @@ package com.example.gameapp.ui.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,23 +11,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.gameapp.R
+import com.example.gameapp.ui.composable.util.LoadError
+import com.example.gameapp.ui.composable.util.LoadingIndicator
+import com.example.gameapp.ui.composable.util.TopBar
+import com.example.gameapp.util.startKoinApplication
 import com.example.gameapp.viewmodel.GameDetailsViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,12 +59,7 @@ fun GameDetailsScreen(
     LoadError(error = loadError)
 
     if (isLoading) {
-        Box(modifier = modifier.fillMaxSize()) {
-            CircularProgressIndicator(
-                color = Color.Black,
-                modifier = modifier.align(Alignment.Center)
-            )
-        }
+        LoadingIndicator(modifier = modifier.fillMaxSize())
     } else {
         Column(modifier = modifier.fillMaxSize()) {
             TopBar(text = gameDetails?.name ?: "", shouldShowShadow = false)
@@ -72,7 +71,11 @@ fun GameDetailsScreen(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
             )
-            Column(modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)){
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 32.dp, vertical = 16.dp)
+                    .verticalScroll(rememberScrollState())
+            ){
                 if (platforms.isNotEmpty()) {
                     GameDetailsSection(
                         title = stringResource(R.string.platforms),
@@ -115,7 +118,6 @@ fun GameDetailsScreen(
                     GameDetailsSection(
                         title = stringResource(R.string.description),
                         text =  description,
-                        modifier = modifier.verticalScroll(rememberScrollState()),
                         isLast = true
                     )
                 }
@@ -150,4 +152,14 @@ fun GameDetailsSection(
             .fillMaxWidth()
             .background(Color.LightGray))
     }
+}
+
+@Preview
+@Composable
+fun GameDetailsPreview() {
+    val context = LocalContext.current
+    startKoinApplication(context)
+
+    val navController = rememberNavController()
+    GameDetailsScreen(gameId = "2", navController = navController)
 }

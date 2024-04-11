@@ -1,4 +1,5 @@
-package com.example.gameapp.ui.composable
+
+package com.example.gameapp.ui.composable.util
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

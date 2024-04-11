@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gameapp.navigation.Screen
 import com.example.gameapp.repository.DataStorePreferences
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
@@ -19,6 +20,7 @@ class SplashViewModel(
 
     init {
         viewModelScope.launch {
+            delay(1000)
             dataStore.isOnboardingDoneFlow.collect {
                 _startDestination.value = if (it) Screen.Home.route else Screen.GenreSelection.route
             }
