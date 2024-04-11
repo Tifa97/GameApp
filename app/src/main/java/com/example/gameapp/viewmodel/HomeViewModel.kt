@@ -52,6 +52,7 @@ class HomeViewModel(
                     result.data?.let {
                         _games.value = it.results
                     }
+                    if (_loadError.value.isNotEmpty()) _loadError.value = ""
                     _isLoading.value = false
                 }
                 is Resource.Error -> {
@@ -69,5 +70,9 @@ class HomeViewModel(
         viewModelScope.launch {
             selectedGenre.emit(genreName)
         }
+    }
+
+    fun setErrorMessage(message: String) {
+        _loadError.value = message
     }
 }

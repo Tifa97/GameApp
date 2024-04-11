@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -45,6 +46,7 @@ import com.example.gameapp.ui.composable.util.LoadError
 import com.example.gameapp.ui.composable.util.LoadingIndicator
 import com.example.gameapp.ui.composable.util.TopBar
 import com.example.gameapp.util.Constants
+import com.example.gameapp.util.containsRPGorEmptySpaces
 import com.example.gameapp.util.startKoinApplication
 import com.example.gameapp.viewmodel.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -61,7 +63,6 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 
     Column {
         TopBar(shouldShowOptions = true, navController = navController)
-        LoadError(error = loadError)
 
         if (genres.isEmpty()) {
             Box(modifier = modifier.fillMaxSize()) {
@@ -79,6 +80,14 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             }
         } else {
             if (selectedGenre.isEmpty()) viewModel.setSelectedGenre(genres[0].name)
+            when {
+                selectedGenre.containsRPGorEmptySpaces() && loadError.isEmpty() -> {
+                    viewModel.setErrorMessage(stringResource(R.string.endpoint_issue))
+                }
+                !selectedGenre.containsRPGorEmptySpaces() && loadError == stringResource(R.string.endpoint_issue) -> {
+                    viewModel.setErrorMessage("")
+                }
+            }
 
             Column(modifier = modifier.fillMaxSize()) {
                 LazyRow(
@@ -89,9 +98,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                         GenreTab(genres[it], selectedGenre, viewModel)
                     })
                 }
-                if (selectedGenre == Constants.RPG || selectedGenre.contains(" ")) {
-                    LoadError(error = stringResource(R.string.endpoint_issue))
-                }
+                LoadError(error = loadError)
                 if (isLoading) {
                     LoadingIndicator(
                         modifier = modifier
@@ -99,7 +106,9 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                             .fillMaxHeight(0.2f)
                     )
                 } else {
-                    LazyColumn(modifier = modifier.fillMaxSize()) {
+                    LazyColumn(
+                        modifier = modifier.fillMaxSize()
+                    ) {
                         items(games.size, itemContent = {
                             GameEntry(game = games[it], navController = navController)
                         })
