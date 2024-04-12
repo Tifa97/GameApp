@@ -3,10 +3,11 @@ package com.example.gameapp.repository
 import android.content.Context
 import android.util.Log
 import com.example.gameapp.R
-import com.example.gameapp.model.response.GameDetailsResponse
-import com.example.gameapp.model.response.GamesResponse
-import com.example.gameapp.model.response.GenresResponse
-import com.example.gameapp.services.RawgApiClient
+import com.example.gameapp.remote.response.GameDetailsResponse
+import com.example.gameapp.remote.response.GamesResponse
+import com.example.gameapp.remote.response.GenresResponse
+import com.example.gameapp.remote.RawgApiClient
+import com.example.gameapp.util.Constants.Companion.TAG
 import com.example.gameapp.util.Resource
 
 class BackendRepository(
@@ -17,7 +18,7 @@ class BackendRepository(
         val result = try {
             rawgApi.retrofitService.getGenres()
         } catch (e: Exception) {
-            Log.e("GameApp", e.stackTraceToString())
+            Log.e(TAG, e.stackTraceToString())
             return Resource.Error(context.getString(R.string.get_genres_error))
         }
         return Resource.Success(result)
@@ -28,7 +29,7 @@ class BackendRepository(
             // API gives correct response only if genre name is in lowercase
             rawgApi.retrofitService.getGamesForGenre(genres = genre.lowercase())
         } catch (e: Exception) {
-            Log.e("GameApp", e.stackTraceToString())
+            Log.e(TAG, e.stackTraceToString())
             return Resource.Error(context.getString(R.string.get_games_error))
         }
         return Resource.Success(result)
@@ -39,7 +40,7 @@ class BackendRepository(
             // API gives correct response only if genre name is in lowercase
             rawgApi.retrofitService.getGameDetails(id = id)
         } catch (e: Exception) {
-            Log.e("GameApp", e.stackTraceToString())
+            Log.e(TAG, e.stackTraceToString())
             return Resource.Error(context.getString(R.string.get_game_details_error))
         }
         return Resource.Success(result)

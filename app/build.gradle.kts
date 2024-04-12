@@ -33,6 +33,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "API_KEY", "\"e78b21663ecc41f58b15af88e902f1b4\"")
+            buildConfigField("String", "BASE_URL", "\"https://api.rawg.io/api/\"")
+        }
+        debug {
+            buildConfigField("String", "API_KEY", "\"e78b21663ecc41f58b15af88e902f1b4\"")
+            buildConfigField("String", "BASE_URL", "\"https://api.rawg.io/api/\"")
         }
     }
     compileOptions {
@@ -44,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

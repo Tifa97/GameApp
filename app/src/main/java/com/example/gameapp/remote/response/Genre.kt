@@ -1,4 +1,4 @@
-package com.example.gameapp.model.response
+package com.example.gameapp.remote.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

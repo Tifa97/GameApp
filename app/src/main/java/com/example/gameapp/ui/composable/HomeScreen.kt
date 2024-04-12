@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -40,12 +39,11 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.SubcomposeAsyncImage
 import com.example.gameapp.R
 import com.example.gameapp.db.entity.GenreItem
-import com.example.gameapp.model.response.Game
+import com.example.gameapp.remote.response.Game
 import com.example.gameapp.navigation.Screen
 import com.example.gameapp.ui.composable.util.LoadError
 import com.example.gameapp.ui.composable.util.LoadingIndicator
 import com.example.gameapp.ui.composable.util.TopBar
-import com.example.gameapp.util.Constants
 import com.example.gameapp.util.containsRPGorEmptySpaces
 import com.example.gameapp.util.startKoinApplication
 import com.example.gameapp.viewmodel.HomeViewModel

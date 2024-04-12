@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gameapp.db.entity.GenreItem
-import com.example.gameapp.model.response.Genre
+import com.example.gameapp.remote.response.Genre
 import com.example.gameapp.repository.BackendRepository
 import com.example.gameapp.repository.DataStorePreferences
 import com.example.gameapp.repository.DatabaseRepository

@@ -1,13 +1,11 @@
 package com.example.gameapp.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gameapp.model.response.GameDetailsResponse
-import com.example.gameapp.model.response.Platform
-import com.example.gameapp.navigation.Screen
+import com.example.gameapp.remote.response.GameDetailsResponse
+import com.example.gameapp.remote.response.Platform
 import com.example.gameapp.repository.BackendRepository
 import com.example.gameapp.util.Resource
 import kotlinx.coroutines.launch
